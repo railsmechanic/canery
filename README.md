@@ -1,5 +1,5 @@
 # Canery
-Canery is a simple and easy to use key/value store with several commands to store and retrieve data. As the backend uses [Sequel](https://github.com/jeremyevans/sequel/) for persistence, Canery can be used in virtually any environment where a SQL database is available. (For more information please check out the section with the available database adapters.)
+Canery is a simple and easy to use key/value store with several commands to store and retrieve data. As the backend uses [Sequel](https://github.com/jeremyevans/sequel/) for persistence, Canery can be used in virtually any environment where a SQL database is available. (For more information please check out the section in the Sequel documentation with the available database adapters.)
 
 ## Installation
 	gem install canery
