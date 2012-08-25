@@ -40,7 +40,7 @@ Due to the nature of SQL databases it's (almost) impossible for Canery to be as 
 
 ## Information about data types
 ### Keys & Tub names
-Theoretically every string can be used as a key/tub name, from a string like "foo" to the content of a JPEG file. Even an empty string is a valid key. But for better performance, short keys should be your first choice.
+Theoretically every string can be used as a key/tub name, from a string like "foo" to the serialized content of a PNG file. Even an empty string is a valid key/tub name. But for better performance the max key size defaults to 255 characters.
 
 Please keep in mind that Canery uses strings for all keys/tub names, so any other data type will be converted to a string!
 
