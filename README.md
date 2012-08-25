@@ -9,8 +9,11 @@ Canery provides a simple and understandable API which is a bit inspired by Redis
 
 	require 'canery'
 
-	# Create a Client interface with an in-memory SQLite Database 
+	# Create a Client interface with an in-memory SQLite database 
 	client = Canery::Client.new
+	
+	# Create a Client interface connecting to a PostgreSQL database
+	client = Canery::Client.new("postgres://username:password@host:port/database_name")
 
 	# Create a new namespace
 	store = client.tub("store")
