@@ -52,7 +52,7 @@ module Canery
     end
     
     def tub_name(name)
-      name.strip.to_s
+      name.to_s.strip
     end
     
   end

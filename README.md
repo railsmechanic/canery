@@ -32,6 +32,8 @@ Canery provides a simple and understandable API which is a bit inspired by Redis
 
 For more information consider the wiki. (Comming soon... I promise!)
 
+## Performance
+Due to the nature of SQL databases it's (almost) impossible for Canery to be as fast as well-known NoSQL key/value stores like Kyoto Cabinet, LevelDB or Redis. But for environments where NoSQL databases are not available or just for small Web Applications you should give Canery a try.
 
 ## Information about data types
 ### Keys & Tub names

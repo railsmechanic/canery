@@ -71,7 +71,14 @@ module Canery
     
     def mset(name, data)
       raise ArgumentError, "data must be a Hash with keys and values" unless Hash === data
-      namespace(name).multi_insert(data.map{ |key, value| {:key => build_key(key), :value => dump(value)} }) && "OK"
+      begin
+        namespace(name).multi_insert(data.map{ |key, value| {:key => build_key(key), :value => dump(value)} }) && "OK"
+      rescue
+        # Fallback to the slower update method
+        data.each do |key, value|
+          update(name, key, value)
+        end && "OK"
+      end
     end
     
     def delete(name, key)
@@ -139,7 +146,7 @@ module Canery
     end
     
     def build_key(key)
-      key.strip.to_s
+      key.to_s.strip
     end
     
     def basic_tub_name(name)
