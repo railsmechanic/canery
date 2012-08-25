@@ -1,5 +1,5 @@
 # Canery
-Canery is a simple and easy to use key/value store with several commands to store and retrieve data. As the backend uses [Sequel](https://github.com/jeremyevans/sequel/) for persistence, Canery can be used in virtually any environment where a SQL database is available. (For more information please check out the section in the Sequel documentation with the available database adapters.)
+Canery is a simple and easy to use key/value store with several commands to store and retrieve data. Canery uses [Sequel](https://github.com/jeremyevans/sequel/) for persistence, so it can be used in virtually any environment where a SQL database is available. (For more information about the available database adapters please check out the appropriate section in the Sequel documentation.)
 
 ## Installation
 	gem install canery
@@ -29,6 +29,9 @@ Canery provides a simple and understandable API which is a bit inspired by Redis
 
 	# Get this complex value
 	store.get("demo_hash") # => {:first_name => "John", :last_name => "Doe"}
+	
+	# If you set nil as key, Canery builds a uuid-key for you
+	store.set(nil, "oh my god, no key given!") # => "2cf7541a-00c1-4bda-8c75-fc32a5f5fac7"
 
 For more information consider the wiki. (Comming soon... I promise!)
 
