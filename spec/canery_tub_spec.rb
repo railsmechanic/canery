@@ -73,6 +73,15 @@ describe Canery::Tub do
           store.get(key).should == value
         end
       end
+      
+      it "should overwrite alread set values" do
+        store = @client.tub("store")
+        store.mset(demo_hash).should == "OK"
+        store.mset(second_demo_hash).should == "OK"
+        second_demo_hash.each do |key, value|
+          store.get(key).should == value
+        end
+      end
     end
   end
   

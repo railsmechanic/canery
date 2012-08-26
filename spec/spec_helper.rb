@@ -7,3 +7,7 @@ end
 def demo_hash
   {"homer" => "Homer Simpson", "marge" => "Marge Simpson", "lisa" => "Lisa Simpson", "bart" => "Bart Simpson", "maggy" => "Maggy Simpson"}
 end
+
+def second_demo_hash
+  {"homer" => "Simpson Homer", "marge" => "Simpson Marge", "lisa" => "Simpson Lisa", "bart" => "Simpson Bart", "maggy" => "Simpson Maggy"}
+end

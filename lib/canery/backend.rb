@@ -11,9 +11,17 @@ module Canery
     
     def initialize(connection_uri)
       raise ArgumentError, "connection_uri must be a String or nil" unless NilClass === connection_uri || String === connection_uri
+      
       @connection = connection_uri.nil? ? Sequel.sqlite : Sequel.connect(connection_uri)
       @namespace_cache = {}
     end
+    
+    # Only expose call method    
+    def call(command, *args)
+      self.send(command, *args)
+    end
+    
+    private
     
     # Basic namespace methods #
     ###########################
@@ -41,8 +49,8 @@ module Canery
     def namespace?(name)
       connection.table_exists?(basic_tub_name(name))
     end
-    
-    
+
+
     # Methods for get, set, etc. #
     ##############################
     
@@ -55,14 +63,14 @@ module Canery
       raise ArgumentError, "keys argument must be an Array of keys" unless Array === keys
       keys.map!{ |key| build_key(key) }
 
-      # Sort data in the order they appear in the 'keys' Array
+      # Sort the data in the order they appear in the 'keys' Array
       namespace(name).where(:key => keys).sort_by { |element| keys.index(element[:key]) }.map {|dataset| load(dataset[:value]) }
     end
     
     def set(name, key, value)
       begin
         namespace(name).insert(:key => build_key(key), :value => dump(value)) && build_key(key)
-      rescue Sequel::DatabaseError # raised if the key already exists, than update
+      rescue Sequel::DatabaseError # key already exists, use update instead
         update(name, key, value)
       rescue
         "ERROR"
@@ -74,7 +82,7 @@ module Canery
       begin
         namespace(name).multi_insert(data.map{ |key, value| {:key => build_key(key), :value => dump(value)} }) && "OK"
       rescue
-        # Fallback to the slower update method
+        # Fallback to the O(n) update method
         data.each do |key, value|
           update(name, key, value)
         end && "OK"
@@ -116,7 +124,7 @@ module Canery
       end
       
       unless limit.nil?
-        raise ArgumentError, "limit must be a positive Integer" unless Integer === limit
+        raise ArgumentError, "limit parameter must be an Integer" unless Integer === limit
         data = data.limit(limit)
       end
       data.map{ |dataset| dataset[:key] }
@@ -126,13 +134,12 @@ module Canery
       namespace(name).where(:key => build_key(old_key)).limit(1).update(:key => build_key(new_key)) && "OK"
     end
     
-    def length(name)
+    def count(name)
       namespace(name).count
     end
     
-    private
-    
-    # Sequel seems to have problems with escaping, so we use Base64 encoding/decoding as a simple work around
+    # Sequel seems to have problems with escaping, 
+    # therefore we use Base64 encoding/decoding as a simple work around
     def load(data)
       Marshal.load(Base64.urlsafe_decode64(data))
     end

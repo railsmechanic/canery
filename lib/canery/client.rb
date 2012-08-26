@@ -14,27 +14,29 @@ module Canery
     end
     
     def tub(name)
-      create_tub(tub_name(name)) unless tub?(tub_name(name))
+      build_tub_name!(name)
+      create_tub(name) unless tub?(name)
       begin
         @tub_cache ||= {}
-        @tub_cache[tub_name(name)] ||= Tub.new(backend, tub_name(name))
+        @tub_cache[name] ||= Tub.new(backend, name)
       rescue
         raise Canery::CaneryError, "This tub does not exist! You must create it before you can use it."
       end
     end
     
     def delete_tub(name)
-      @tub_cache.delete(tub_name(name)) if @tub_cache[tub_name(name)]
-      backend.delete_namespace(tub_name(name))
+      build_tub_name!(name)
+      @tub_cache.delete(name) if @tub_cache[name]
+      backend.call(:delete_namespace, name)
     end
     
     def has_tub?(name)
-      backend.namespace?(tub_name(name))
+      backend.call(:namespace?, name)
     end
     alias :tub? :has_tub?
     
     def tubs
-      backend.namespaces
+      backend.call(:namespaces)
     end
           
     private
@@ -45,14 +47,14 @@ module Canery
     
     def create_tub(name)
       begin
-        backend.create_namespace(tub_name(name))
+        backend.call(:create_namespace, name)
       rescue => exception
         raise Canery::CaneryError, exception
       end
     end
     
-    def tub_name(name)
-      name.to_s.strip
+    def build_tub_name!(name)
+      name.to_s.strip!
     end
     
   end
